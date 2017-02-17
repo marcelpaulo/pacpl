@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------
+mod-install.sh:
+
+this script will attempt to install all the required perl modules
+for pacpl.  For some it may be necessary to actually start the CPAN shell:
+
+perl -MCPAN -e 'shell' (or just 'cpan')
+
+and from there type: install Module::Name
+---------------------------------------------------------------------------
+mod-install-ubuntu.sh
+
+Same as above except it uses apt-get to install the disto based packages
+for ubuntu/kubuntu.
+
+The script will attempt ot install Ogg::Vorbis::Header manually.
