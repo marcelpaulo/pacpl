@@ -1,4 +1,20 @@
 =================
+[**** 5.1.0 ****]
+=================
+
+* updated version to 5.1.0
+
++ added patches directory.  below updates and incorporations are included.
+
+% incorporated the following patches Matteo Cypriani (mcy@lm7.fr)
+	- typos
+	- configure exit
+	- enforce outdir when preserve is utilized
+	- multiple input source decode
+
+* updated README.module documentation thanks to Cristian Greco <cristian.debian@gmail.com> 
+
+=================
 [**** 5.0.2 ****]
 ================
 
