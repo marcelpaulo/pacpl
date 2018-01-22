@@ -1,10 +1,10 @@
 # Process this file with autoconf to produce a configure script.
 #
-# Copyright (C) 2007-2017 Philip Lyons (vorzox@gmail.com)
+# Copyright (C) 2007-2018 Philip Lyons (vorzox@gmail.com)
 
 AC_PACKAGE_NAME(Perl Audio Converter)
-AC_PACKAGE_TARNAME(pacpl-5.1.0.tar.bz2)
-AC_PACKAGE_VERSION(5.1.0)
+AC_PACKAGE_TARNAME(pacpl-5.1.1.tar.bz2)
+AC_PACKAGE_VERSION(5.1.1)
 AC_PACKAGE_BUGREPORT(vorzox@gmail.com)
 
 m4_include([aclocal/ax_prog_perl_modules.m4])
@@ -12,7 +12,7 @@ m4_include([aclocal/ax_prog_perl_modules.m4])
 AC_PROG_PERL_VERSION(5.18.1)
 AC_PREREQ([2.69])
 
-AC_INIT([pacpl],[5.1.0])
+AC_INIT([pacpl],[5.1.1])
 
 AM_INIT_AUTOMAKE
 
@@ -22,7 +22,7 @@ AC_SUBST(KDEDIR)
 
 AC_PREFIX_DEFAULT(/usr)
 AC_PREFIX_PROGRAM(pacpl)
-AC_CONFIG_SRCDIR(pacpl)
+AC_CONFIG_SRCDIR(pacpl.in)
 
 AC_PROG_INSTALL
 

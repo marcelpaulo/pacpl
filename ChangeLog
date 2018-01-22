@@ -1,4 +1,18 @@
 =================
+[**** 5.1.1 ****]
+=================
+
+* updated version to 5.1.1
+
+% incoporated patches from Reuben Thomas (rrt@sc3d.org)
+	- fix installaton under different prefix and/or DESTDIR
+	- fix hardwired pathes in pacpl
+
+%note:  with above patches pacpl is now pacpl.in which will be renamed after configure
+
+% updated Makefile.am to remove pacpl with "make distclean"
+
+=================
 [**** 5.1.0 ****]
 =================
 
