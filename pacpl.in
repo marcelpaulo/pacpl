@@ -1402,6 +1402,11 @@ my $pm = Parallel::ForkManager->new($jobs);
                                        DSTR => sub { "-vc null -vo null -ao pcm:file=%o %i" },
                                      },
                                       
+		   'alac-decoder' => {
+                                       NAME => "alac-decoder",
+                                       DSTR => sub { "$dopts -f %o %i" },
+                                     },
+                                      
                            },
 
                 ESTR    => sub { "$eopts -w -q $aacqual %i -o %o" },
