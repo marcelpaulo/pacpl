@@ -2996,6 +2996,9 @@ sub write_tags {
                                   # ID3v2 Tags
                                   unless(exists($tag_m->{ID3v2})) { $tag_m->new_tag("ID3v2"); }
 
+				  # remove leading zeros and /<total_tracks> from the track number
+				  $tag_name{track} =~ s!(0+)?(\d+)(/\d+)?!$2!;
+
                                   $tag_m->{ID3v2}->add_frame("TIT2", "$tag_name{title}")    if defined($tag_name{title});
                                   $tag_m->{ID3v2}->add_frame("TRCK", "$tag_name{track}")    if defined($tag_name{track});
                                   $tag_m->{ID3v2}->add_frame("TPE1", "$tag_name{artist}")   if defined($tag_name{artist});
