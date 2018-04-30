@@ -79,10 +79,9 @@ my
    $taginfo,
 );
 
-# name, version & icon information
+# name, version
 my $name      = "Perl Audio Converter";
 my $version   = "5.1.1";
-my $icon_path = "/etc/pacpl/pacpl.png";
 
 # If these options are toggled,  messages/errors will be displayed 
 # via kdialog or zenity/notify-send (depending on environment)
@@ -138,6 +137,7 @@ my %config = (
 my $conf_path = "@sysconfdir@/pacpl";
 my $po_dir    = "@pkgdatadir@/locale";
 my $mod_dir   = "$conf_path/modules";
+my $icon_path = "$conf_path/pacpl.png";
 
 my $conf_file;
 
