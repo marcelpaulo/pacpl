@@ -3007,19 +3007,6 @@ sub write_tags {
 
                                   $tag_m->{ID3v2}->write_tag;
                             
-                                  # ID3v1 Tags
-                                  unless(exists($tag_m->{ID3v1})) { $tag_m->new_tag("ID3v1"); }
-                            
-                                  $tag_m->{ID3v1}->title("$tag_name{title}")      if defined($tag_name{title});
-                                  $tag_m->{ID3v1}->track("$tag_name{track}")      if defined($tag_name{track});
-                                  $tag_m->{ID3v1}->artist("$tag_name{artist}")    if defined($tag_name{artist});
-                                  $tag_m->{ID3v1}->album("$tag_name{album}")      if defined($tag_name{album});
-                                  $tag_m->{ID3v1}->comment("$tag_name{comment}")  if defined($tag_name{comment});
-                                  $tag_m->{ID3v1}->year("$tag_name{year}")        if defined($tag_name{year});
-                                  $tag_m->{ID3v1}->genre("$tag_name{genre}")      if defined($tag_name{genre});
-                            
-                                  $tag_m->{ID3v1}->write_tag;
-                            
                                   return 0;
 
                               }
