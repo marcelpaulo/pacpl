@@ -3595,7 +3595,7 @@ if (@ARGV) {
 
 load_user_modules() if $config{IMPORTM} == 1;
 
-if ($to and @ARGV and not $rip) { proc_input(); } 
+if ($to and @ARGV and not $rip) { proc_input(); exit $total_failed; } 
 
 elsif ($to and $rip) { proc_cd(); }
 elsif ($my_encoder and not $to) { show_encoders(); }
