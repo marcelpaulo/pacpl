@@ -24,6 +24,7 @@ use File::Basename;
 use File::Find;
 use File::Spec::Functions qw(rel2abs);
 use Parallel::ForkManager;
+use String::ShellQuote;
 
 use feature qw(switch say);
 
@@ -2423,7 +2424,9 @@ sub proc_files {
                    $outfile = "$file" if not $out_name;
 
                    if ($keep and $if eq $to) {
-                       system("cp -v \"$dir/$file.$ext\" \"$outdir/$outfile.$ext\"") if $outdir ne $dir and not -e "$outdir/$outfile.$ext";
+		       my $source_q = shell_quote "$dir/$file.$ext";
+		       my $dest_q = shell_quote "$outdir/$outfile.$ext";
+                       system("cp -v $source_q $dest_q") if $outdir ne $dir and not -e "$outdir/$outfile.$ext";
                        next if $outdir eq $dir;
                    } 
                    
@@ -2565,14 +2568,16 @@ sub convert {
        check_decoder($codec);
                          
     my $wavf = "$outf.$$.wav";
+    my $wavf_q = shell_quote $wavf;
     my $decode_string = $run{$codec}{DECODER}{$decoder}{DSTR}->();
-       $decode_string =~ s/%i/\"$inf.$infmt\"/;
+    my $inf_q = shell_quote "$inf.$infmt";
+       $decode_string =~ s/%i/$inf_q/;
        if ( $decode_string =~ m/%o/ )  {
-	   $decode_string =~ s/%o/\"$wavf\"/;
+	   $decode_string =~ s/%o/$wavf_q/;
        } else  {
 	   $wavf = "$outf.wav";
+	   $wavf_q = shell_quote $wavf;
        }
-       $decode_string =~ s/(\$|\\)/\\$1/g;
 
        pnotice("debug","\n$run{$codec}{DECODER}{$decoder}{NAME} $decode_string", 2) if $dryrun;
 
@@ -2596,20 +2601,20 @@ sub convert {
        
        # normalize wav file before encoding to output format
        perror("no_app","normalize") if $normalize and not `which normalize 2>/dev/null`;
-       system("normalize $nopts \"$wavf\"") if $normalize;
+       system("normalize $nopts $wavf_q") if $normalize;
 
        # copy meta-data from input file to %tag_name 
        read_tags("$inf.$infmt", "$codec") if $run{$codec}{TAGS}{READ} == 1 and not $dryrun;
 
     my $tag_opts = format_tags($to); # tag options for mp4/m4a/m4b/mpc/mpp/bonk/spx/wv
     
+    my $outf_q = shell_quote "$outf.$to";
     my $encode_string = $run{$to}{ENCODER}{$encoder}{ESTR}->();
-       $encode_string =~ s/%i/$tag_opts \"$wavf\"/  if $to =~ /mpc|mpp|mp4|m4a/ and $encoder eq "faac" or $encoder eq "mpcenc";
-       $encode_string =~ s/%i/\"$wavf\" $tag_opts/  if $to =~ /mpc|mpp|mp4|m4a/ and $encoder eq "ffmpeg" or $encoder eq "avconv";
-       $encode_string =~ s/%i/\"$wavf\"/            if $to !~ /mpc|mpp|mp4|m4a/;
-       $encode_string =~ s/%o/$tag_opts \"$outf.$to\"/     if $tag_opts ne " " and $to !~ /mpc|mpp|mp4|m4a/;
-       $encode_string =~ s/%o/\"$outf.$to\"/               if $tag_opts eq " " or $to =~ /mpc|mpp|mp4|m4a/;
-       $encode_string =~ s/(\$|\\)/\\$1/g;
+       $encode_string =~ s/%i/$tag_opts $wavf_q/  if $to =~ /mpc|mpp|mp4|m4a/ and $encoder eq "faac" or $encoder eq "mpcenc";
+       $encode_string =~ s/%i/$wavf_q $tag_opts/  if $to =~ /mpc|mpp|mp4|m4a/ and $encoder eq "ffmpeg" or $encoder eq "avconv";
+       $encode_string =~ s/%i/$wavf_q/            if $to !~ /mpc|mpp|mp4|m4a/;
+       $encode_string =~ s/%o/$tag_opts $outf_q/     if $tag_opts ne " " and $to !~ /mpc|mpp|mp4|m4a/;
+       $encode_string =~ s/%o/$outf_q/               if $tag_opts eq " " or $to =~ /mpc|mpp|mp4|m4a/;
        
        # read tag options from command line if present
        get_user_tags();
@@ -3103,7 +3108,8 @@ sub write_tags {
                                   $tag_m = "$tag_m -t \"YEAR=$tag_name{year}\""         if $tag_name{year};
                                   $tag_m = "$tag_m -t \"GENRE=$tag_name{genre}\""       if $tag_name{genre};
                             
-                                  system("vorbiscomment -w $tag_m \"$out_file\"") if $tag_m ne ''; 
+				  my $out_file_q = shell_quote $out_file;
+                                  system("vorbiscomment -w $tag_m $out_file_q") if $tag_m ne ''; 
                             
                                   return 0;
                               }
@@ -3355,7 +3361,8 @@ sub rip_cd {
         $on =~ s/\//_/g;
 
         say "\ncdparanoia -d $device $tno $on.wav\n"  if $dryrun;
-        system("cdparanoia -d $device $tno \"$on.wav\" >/dev/null 2>&1")  if not $dryrun;
+	my $on_q = shell_quote "$on.wav";
+        system("cdparanoia -d $device $tno $on_q >/dev/null 2>&1")  if not $dryrun;
 
     if ($to !~ /wav/i) {
 
